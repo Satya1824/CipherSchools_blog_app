@@ -7,37 +7,25 @@ import BlogCard from "../components/blogs/BlogCard";
 import { toast } from "react-toastify";
 import { bouncy } from "ldrs";
 
-const Profile = () => {
-  const [auth, setAuth] = useAuth();
+const Blogs = () => {
   const [blogs, setBlogs] = useState();
   const [load, setLoad] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const params = useParams();
 
-  const { id } = params;
-
-  const handleLogout = () => {
-    localStorage.removeItem("auth");
-    navigate("/auth");
-  };
-
-  const getUserBlogs = async () => {
+  const getBlogs = async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.SERVER_URL}/blogs/user-blogs/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch(`${process.env.SERVER_URL}/blogs`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await res.json();
 
       if (data.success) {
-        setBlogs(data.userBlogs);
+        setBlogs(data.blogs);
       } else {
         toast.error(data.message, {
           position: "top-right",
@@ -67,40 +55,15 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getUserBlogs();
+    getBlogs();
     bouncy.register();
   }, []);
 
   return (
-    <Layout title={"Profile"}>
+    <Layout title={"All Blogs"}>
       <div className="pt-10 pb-20">
-        <h1 className="font-bold text-secondary text-[2rem] mb-2">
-          {auth?.user?.id === id ? "My Profile" : "User Profile"}
-        </h1>
-        <div className="flex items-center gap-3 mb-2">
-          <UserRound size={20} className="text-tertiary" />
-          <p className="text-tertiary m-0">{auth?.user?.name}</p>
-        </div>
-        <div className="flex items-center gap-3 mb-5">
-          <Mail size={20} className="text-tertiary" />
-          <p className="text-tertiary m-0">{auth?.user?.email}</p>
-        </div>
-        <div className="flex gap-3 items-center mb-5">
-          <button
-            onClick={() => navigate("/addblog")}
-            className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
-          >
-            Add Blog
-          </button>
-          <button
-            className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-        <h1 className="font-bold text-secondary text-[2rem] mt-10 mb-5">
-          {auth?.user?.id === id ? "My Blogs" : "User Blogs"}
+        <h1 className="font-bold text-secondary text-[2rem] mb-5">
+          Blog Posts
         </h1>
 
         <div>
@@ -151,4 +114,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Blogs;

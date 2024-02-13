@@ -1,13 +1,13 @@
-const userModel = require("../models/User.model");
-const jwt = require("jsonwebtoken");
-const validator = require("validator");
-const bcrypt = require("bcrypt");
+import JWT from "jsonwebtoken";
+import validator from "validator";
+import bcrypt from "bcrypt";
+import userSchema from "../models/userModel.js";
 
 function createToken(id) {
-  return jwt.sign({ _id: id }, process.env.SECRET);
+  return JWT.sign({ _id: id }, process.env.SECRET);
 }
 
-async function signupUser(req, res) {
+export const signupUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
@@ -31,7 +31,7 @@ async function signupUser(req, res) {
       });
     }
 
-    const found = await userModel.findOne({ email });
+    const found = await userSchema.findOne({ email });
     if (found) {
       return res.status(403).send({
         success: false,
@@ -60,8 +60,9 @@ async function signupUser(req, res) {
       message: error.message,
     });
   }
-}
-async function loginUser(req, res) {
+};
+
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -72,7 +73,7 @@ async function loginUser(req, res) {
       });
     }
 
-    const user = await userModel.findOne({ email });
+    const user = await userSchema.findOne({ email });
     if (!user) {
       return res.status(401).send({
         success: false,
@@ -105,8 +106,4 @@ async function loginUser(req, res) {
       message: error.message,
     });
   }
-}
-module.exports = {
-  signupUser,
-  loginUser,
 };

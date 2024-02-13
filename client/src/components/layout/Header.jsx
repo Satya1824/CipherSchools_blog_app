@@ -17,6 +17,10 @@ const Header = () => {
 
   const inputRef = useRef(null);
 
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+  };
+
   useEffect(() => {
     if (searchWidth === "230px" && inputRef.current) {
       inputRef.current.focus();
@@ -52,10 +56,17 @@ const Header = () => {
           <Link to="/" className="text-secondary">
             Home
           </Link>
-          <Link to="blogs" className="text-secondary">
+          <Link to="/blogs" className="text-secondary">
             Blogs
           </Link>
-          <Link className="text-secondary">About</Link>
+          <Link to="/addBlog" className="text-secondary">
+            Add Blog
+          </Link>
+          {auth?.user && (
+            <Link to="/auth" onClick={handleLogout} className="text-secondary">
+              Logout
+            </Link>
+          )}
         </div>
       </div>
       <div>
