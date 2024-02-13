@@ -42,7 +42,7 @@ export const signupUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = new userModel({
+    const user = new userSchema({
       name: name,
       email: email,
       password: hashedPassword,
@@ -99,6 +99,30 @@ export const loginUser = async (req, res) => {
         name: user.name,
         email: user.email,
       },
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const user = await userSchema.findOne({ _id: userId }).select("-password");
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "No such user exists!",
+      });
+    }
+
+    res.status(200).send({
+      success: true,
+      user,
     });
   } catch (error) {
     res.status(500).send({

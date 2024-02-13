@@ -18,6 +18,11 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    user_name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     image: {
       type: String,
       required: true,

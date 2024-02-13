@@ -9,7 +9,8 @@ import { bouncy } from "ldrs";
 
 const Profile = () => {
   const [auth, setAuth] = useAuth();
-  const [blogs, setBlogs] = useState();
+  const [user, setUser] = useState("");
+  const [blogs, setBlogs] = useState([]);
   const [load, setLoad] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,12 +18,14 @@ const Profile = () => {
 
   const { id } = params;
 
+  const Auth = auth?.user?.id === id;
+
   const handleLogout = () => {
     localStorage.removeItem("auth");
     navigate("/auth");
   };
 
-  const getUserBlogs = async () => {
+  const getUserBlogs = async (id) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -66,10 +69,36 @@ const Profile = () => {
     setLoading(false);
   };
 
+  const getUser = async (id) => {
+    try {
+      const res = await fetch(`${process.env.SERVER_URL}/user/${id}`);
+
+      const data = await res.json();
+
+      if (data.success) {
+        setUser(data.user);
+      }
+    } catch (error) {
+      toast.error("Error fetching user details!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
   useEffect(() => {
-    getUserBlogs();
+    getUserBlogs(id);
     bouncy.register();
-  }, []);
+    if (!Auth) {
+      getUser(id);
+    }
+  }, [id]);
 
   return (
     <Layout title={"Profile"}>
@@ -79,26 +108,32 @@ const Profile = () => {
         </h1>
         <div className="flex items-center gap-3 mb-2">
           <UserRound size={20} className="text-tertiary" />
-          <p className="text-tertiary m-0">{auth?.user?.name}</p>
+          <p className="text-tertiary m-0">
+            {Auth ? auth?.user?.name : user?.name}
+          </p>
         </div>
         <div className="flex items-center gap-3 mb-5">
           <Mail size={20} className="text-tertiary" />
-          <p className="text-tertiary m-0">{auth?.user?.email}</p>
+          <p className="text-tertiary m-0">
+            {Auth ? auth?.user?.email : user?.email}
+          </p>
         </div>
-        <div className="flex gap-3 items-center mb-5">
-          <button
-            onClick={() => navigate("/addblog")}
-            className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
-          >
-            Add Blog
-          </button>
-          <button
-            className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
+        {Auth && (
+          <div className="flex gap-3 items-center mb-5">
+            <button
+              onClick={() => navigate("/addblog")}
+              className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
+            >
+              Add Blog
+            </button>
+            <button
+              className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        )}
         <h1 className="font-bold text-secondary text-[2rem] mt-10 mb-5">
           {auth?.user?.id === id ? "My Blogs" : "User Blogs"}
         </h1>

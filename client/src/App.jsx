@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import AddBlog from "./pages/AddBlog";
 import Blogs from "./pages/Blogs";
 import { useAuth } from "./context/auth";
+import UpdateBlog from "./pages/UpdateBlog";
 
 function App() {
   const [auth, setAuth] = useAuth();
@@ -18,7 +19,11 @@ function App() {
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog/:id" element={<SingleBlog />} />
         <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/addblog" element={auth?.user ? <AddBlog /> : <Auth />} />
+        <Route path="/addBlog" element={auth?.user ? <AddBlog /> : <Auth />} />
+        <Route
+          path="/updateBlog/:id"
+          element={auth?.user ? <UpdateBlog /> : <Auth />}
+        />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

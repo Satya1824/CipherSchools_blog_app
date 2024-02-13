@@ -1,4 +1,5 @@
 import JWT from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
 export const requireSignIn = async (req, res, next) => {
   try {
@@ -12,7 +13,23 @@ export const requireSignIn = async (req, res, next) => {
     }
 
     const decode = JWT.verify(token, process.env.SECRET);
-    req.user = decode;
+
+    const user = await userModel.findById(decode._id).select("-password");
+
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    // user._id = user._id.toString();
+
+    req.user = {
+      _id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+    };
     next();
   } catch (error) {
     console.log(error);

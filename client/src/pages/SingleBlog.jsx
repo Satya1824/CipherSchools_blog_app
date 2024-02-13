@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BlogCard from "../components/blogs/BlogCard";
 import Layout from "../components/layout/Layout";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bouncy } from "ldrs";
 
@@ -15,7 +15,7 @@ const SingleBlog = () => {
 
   const { id } = params;
 
-  const getSingleBlog = async () => {
+  const getSingleBlog = async (id) => {
     setLoading1(true);
     try {
       const res = await fetch(`${process.env.SERVER_URL}/blogs/${id}`, {
@@ -98,15 +98,15 @@ const SingleBlog = () => {
   };
 
   useEffect(() => {
-    getSingleBlog();
+    getSingleBlog(id);
     getAllBlogs();
     bouncy.register();
-  }, []);
+  }, [id]);
 
   return (
     <Layout title={`${blog?.title}`}>
-      <div className="grid grid-cols-4 my-10">
-        <div className="col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-4 my-10">
+        <div className="col-span-1 hidden lg:block">
           <h4 className="text-secondary ml-7 mb-4">Recent blog posts</h4>
           {loading1 ? (
             <div className="flex items-center justify-center h-[40dvh] w-[100%]">
@@ -129,7 +129,7 @@ const SingleBlog = () => {
           )}
         </div>
 
-        <div className="col-span-3">
+        <div className="lg:col-span-3 col-span-1">
           {loading2 ? (
             <div className="flex items-center justify-center h-[40dvh] w-[100%]">
               <l-bouncy size="45" speed="1.75" color="white"></l-bouncy>
@@ -141,7 +141,10 @@ const SingleBlog = () => {
                   {blog?.category}
                 </p>
                 <p className="text-green-300 text-[.9rem] my-2">
-                  Satya Prakash - Jan 25, 2023
+                  <Link to={`/profile/${blog?.user_id}`}>
+                    {blog?.user_name}
+                  </Link>{" "}
+                  - Jan 25, 2023
                 </p>
               </div>
               <h1 className="text-secondary text-[2.5rem] font-semibold leading-none">
@@ -222,6 +225,9 @@ const SingleBlog = () => {
               </p>
             </>
           )}
+          <p className="text-secondary text-center text-[2rem] mt-3 mb-10">
+            .....
+          </p>
         </div>
       </div>
     </Layout>

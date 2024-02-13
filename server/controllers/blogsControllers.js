@@ -2,13 +2,14 @@ import blogSchema from "../models/blogModel.js";
 
 export const getAllBlogs = async (req, res) => {
   try {
-    const blogs = await blogSchema.find({});
+    const blogs = await blogSchema.find({}).sort({ createdAt: -1 });
+
     res.status(200).send({
       success: true,
       blogs,
     });
   } catch (error) {
-    res.status(500).sent({
+    res.status(500).send({
       success: false,
       message: "Something went wrong while fetching blogs!",
     });
@@ -34,6 +35,7 @@ export const getUserBlogs = async (req, res) => {
 export const createBlog = async (req, res) => {
   try {
     const userId = req.user._id;
+    const userName = req.user.name;
     const { category, title, body, image } = req.body;
 
     if (!category || !title || !body || !image) {
@@ -49,6 +51,7 @@ export const createBlog = async (req, res) => {
       category,
       image,
       user_id: userId,
+      user_name: userName,
     });
 
     await blog.save();
@@ -106,7 +109,7 @@ export const updateBlog = async (req, res) => {
       });
     }
 
-    const updatedBlog = await BlogModel.findByIdAndUpdate(
+    const updatedBlog = await blogSchema.findByIdAndUpdate(
       { _id: id },
       req.body,
       {
@@ -143,7 +146,7 @@ export const deleteBlog = async (req, res) => {
         message: "Not authorized to perform this action!",
       });
     }
-    const deletedBlog = await BlogModel.findOneAndDelete({ _id: id });
+    const deletedBlog = await blogSchema.findOneAndDelete({ _id: id });
     res.status(200).send({
       success: true,
       message: "Blog deleted!",

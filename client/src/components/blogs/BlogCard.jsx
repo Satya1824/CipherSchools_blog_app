@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, SquarePen } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/auth";
 
 const BlogCard = ({ data }) => {
+  const [auth, setAuth] = useAuth();
+
   useEffect(() => {
     console.log(data);
   }, []);
@@ -18,12 +21,22 @@ const BlogCard = ({ data }) => {
           </p>
           <div className="flex items-center justify-between">
             <h2 className="text-secondary text-[1.15rem]">{data.title}</h2>
-            <Link to={`/blog/${data._id}`}>
-              <ArrowUpRight size={20} className="text-secondary" />
-            </Link>
+            <div className="flex items-center gap-1">
+              <Link to={`/blog/${data._id}`}>
+                <ArrowUpRight size={20} className="text-secondary" />
+              </Link>
+              {auth?.user?.id === data.user_id && (
+                <Link to={`/updateBlog/${data._id}`}>
+                  <SquarePen size={13} className="text-secondary" />
+                </Link>
+              )}
+            </div>
           </div>
           <p className="text-green-300 text-[.75rem] my-2">
-            Satya Prakash - Jan 25, 2023
+            <Link className="hover:underline" to={`/profile/${data.user_id}`}>
+              {data.user_name}
+            </Link>{" "}
+            - Jan 25, 2023
           </p>
           <p className="my-3 text-secondary text-opacity-70 text-[.75rem] leading-snug line-clamp-3">
             {data.body}

@@ -46,7 +46,6 @@ const AddBlog = () => {
         category: category,
         image: image,
       });
-      console.log(res);
 
       if (res.data.success) {
         resetForm();
@@ -96,7 +95,7 @@ const AddBlog = () => {
         <div className="mb-5 mt-3">
           <label
             htmlFor="category"
-            className="font-semibold text-secondary block"
+            className="font-semibold text-secondary block mb-2"
           >
             Category
           </label>
@@ -115,7 +114,10 @@ const AddBlog = () => {
           />
         </div>
         <div className="mb-5">
-          <label htmlFor="title" className="font-semibold text-secondary block">
+          <label
+            htmlFor="title"
+            className="font-semibold text-secondary block mb-2"
+          >
             Title
           </label>
           <input
@@ -133,7 +135,10 @@ const AddBlog = () => {
           />
         </div>
         <div className="mb-5">
-          <label htmlFor="body" className="font-semibold text-secondary block">
+          <label
+            htmlFor="body"
+            className="font-semibold text-secondary block mb-2"
+          >
             Body
           </label>
           <textarea
@@ -151,8 +156,11 @@ const AddBlog = () => {
             }}
           />
         </div>
-        <div className="mb-5">
-          <label htmlFor="image" className="font-semibold text-secondary block">
+        <div className="mb-10">
+          <label
+            htmlFor="image"
+            className="font-semibold text-secondary block mb-2"
+          >
             Image URL
           </label>
           <input
@@ -170,7 +178,7 @@ const AddBlog = () => {
           />
         </div>
         <button
-          className="text-secondary border hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold"
+          className="text-primmary md:text-secondary bg-secondary md:bg-transparent border md:hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold w-full sm:w-auto"
           onClick={handleSubmit}
         >
           Submit
