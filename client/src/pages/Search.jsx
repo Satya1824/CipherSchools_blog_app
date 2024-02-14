@@ -6,12 +6,12 @@ import { Mail, UserRound } from "lucide-react";
 import BlogCard from "../components/blogs/BlogCard";
 import { toast } from "react-toastify";
 import { bouncy } from "ldrs";
+import { useSearch } from "../context/search";
 
-const Blogs = () => {
+const Search = () => {
+  const [search, setSearch] = useSearch();
   const [blogs, setBlogs] = useState([]);
-  const [load, setLoad] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const getBlogs = async () => {
     setLoading(true);
@@ -59,12 +59,23 @@ const Blogs = () => {
     bouncy.register();
   }, []);
 
+  const filteredBlogs = blogs?.filter((blog) =>
+    blog.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Layout title={"All Blogs"}>
       <div className="pt-10 pb-20">
-        <h1 className="font-bold text-secondary text-[2rem] mb-5">
-          Blog Posts
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-bold text-secondary text-[2rem] mb-5">
+            Blog Posts
+          </h1>
+          <p className="text-secondary text-[.8rem]">
+            {filteredBlogs?.length === 1
+              ? "1 result found!"
+              : `${filteredBlogs?.length} results found!`}
+          </p>
+        </div>
 
         <div>
           {loading ? (
@@ -73,38 +84,16 @@ const Blogs = () => {
             </div>
           ) : (
             <>
-              {blogs?.length === 0 ? (
-                <p>No blogs found!</p>
+              {filteredBlogs?.length === 0 ? (
+                <p className="text-secondary text-center mt-20 mb-10">
+                  No blogs found!
+                </p>
               ) : (
-                <>
-                  <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-y-3">
-                    {load ? (
-                      <>
-                        {blogs?.map((b) => (
-                          <BlogCard data={b} />
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        {blogs?.slice(0, 8).map((b) => (
-                          <BlogCard data={b} />
-                        ))}
-                      </>
-                    )}
-                  </div>
-                  {blogs?.length > 8 ? (
-                    <div className="text-center my-10">
-                      <button
-                        onClick={() => setLoad(!load)}
-                        className="border text-secondary rounded px-5 py-1 hover:bg-secondary hover:text-primary transition"
-                      >
-                        {load ? "Load Less Blogs" : "Load All Blogs"}
-                      </button>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </>
+                <div className="grid xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 gap-y-3">
+                  {filteredBlogs?.map((b) => (
+                    <BlogCard data={b} />
+                  ))}
+                </div>
               )}
             </>
           )}
@@ -114,4 +103,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default Search;

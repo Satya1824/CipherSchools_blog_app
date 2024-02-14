@@ -6,9 +6,12 @@ import { useAuth } from "../../context/auth";
 const BlogCard = ({ data }) => {
   const [auth, setAuth] = useAuth();
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { month: "short", day: "numeric", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  };
+
   return (
     <div className="flex justify-center">
       <div className="bord w-[18rem] p-3">
@@ -20,7 +23,9 @@ const BlogCard = ({ data }) => {
             {data.category}
           </p>
           <div className="flex items-center justify-between">
-            <h2 className="text-secondary text-[1.15rem]">{data.title}</h2>
+            <h2 className="text-secondary text-[1.15rem] line-clamp-1">
+              {data.title}
+            </h2>
             <div className="flex items-center gap-1">
               <Link to={`/blog/${data._id}`}>
                 <ArrowUpRight size={20} className="text-secondary" />
@@ -36,7 +41,7 @@ const BlogCard = ({ data }) => {
             <Link className="hover:underline" to={`/profile/${data.user_id}`}>
               {data.user_name}
             </Link>{" "}
-            - Jan 25, 2023
+            - {formatDate(data.createdAt)}
           </p>
           <p className="my-3 text-secondary text-opacity-70 text-[.75rem] leading-snug line-clamp-3">
             {data.body}

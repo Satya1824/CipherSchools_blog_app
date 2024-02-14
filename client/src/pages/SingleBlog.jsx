@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import BlogCard from "../components/blogs/BlogCard";
 import Layout from "../components/layout/Layout";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bouncy } from "ldrs";
 
 const SingleBlog = () => {
   const [blog, setBlog] = useState("");
-  const [blogs, setBlogs] = useState("");
+  const [blogs, setBlogs] = useState([]);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
-  const navigate = useNavigate();
   const params = useParams();
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { month: "short", day: "numeric", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  };
 
   const { id } = params;
 
@@ -144,85 +149,20 @@ const SingleBlog = () => {
                   <Link to={`/profile/${blog?.user_id}`}>
                     {blog?.user_name}
                   </Link>{" "}
-                  - Jan 25, 2023
+                  - {formatDate(blog?.createdAt)}
                 </p>
               </div>
               <h1 className="text-secondary text-[2.5rem] font-semibold leading-none">
                 {blog?.title}
               </h1>
               <div className="my-8">
-                <img src={blog?.image} alt="Image" className="w-full" />
+                <img
+                  src={blog?.image}
+                  alt="Image"
+                  className="w-full text-secondary"
+                />
               </div>
-              <p className="text-slate-300">
-                ll blog posts Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 Sunday , 1
-                Jan 2023 Bill Walsh leadership lessons PM mental models What is
-                Wireframing? Like to know the secrets of transforming a 2-14
-                team into a 3x Super Bowl winning Dynasty? Mental models are
-                simple expressions of complex processes or relationships.
-                Introduction to Wireframing and its Principles. Learn from the
-                best in the industry. Leadership Management Presentation Product
-                Research Frameworks Design Research Presentation Sunday , 1 Jan
-                2023 Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 How collaboration
-                makes us better designers Our top 10 Javascript frameworks to
-                use Podcast: Creating a better CX Community Collaboration can
-                make our teams stronger, and our individual designs better.
-                JavaScript frameworks make development easy with extensive
-                features and functionalities. Starting a community doesn’t need
-                to be complicated, but how do you get started? Design Research
-                Presentation Software Development Tools SaaS Podcasts Customer
-                Success Presentation Previous 1 2 3 ... 8 9 10 Next ll blog
-                posts Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 Sunday , 1 Jan
-                2023 Bill Walsh leadership lessons PM mental models What is
-                Wireframing? Like to know the secrets of transforming a 2-14
-                team into a 3x Super Bowl winning Dynasty? Mental models are
-                simple expressions of complex processes or relationships.
-                Introduction to Wireframing and its Principles. Learn from the
-                best in the industry. Leadership Management Presentation Product
-                Research Frameworks Design Research Presentation Sunday , 1 Jan
-                2023 Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 How collaboration
-                makes us better designers Our top 10 Javascript frameworks to
-                use Podcast: Creating a better CX Community Collaboration can
-                make our teams stronger, and our individual designs better.
-                JavaScript frameworks make development easy with extensive
-                features and functionalities. Starting a community doesn’t need
-                to be complicated, but how do you get started? Design Research
-                Presentation Software Development Tools SaaS Podcasts Customer
-                Success Presentation Previous 1 2 3 ... 8 9 10 Next ll blog
-                posts Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 Sunday , 1 Jan
-                2023 Bill Walsh leadership lessons PM mental models What is
-                Wireframing? Like to know the secrets of transforming a 2-14
-                team into a 3x Super Bowl winning Dynasty? Mental models are
-                simple expressions of complex processes or relationships.
-                Introduction to Wireframing and its Principles. Learn from the
-                best in the industry. Leadership Management Presentation Product
-                Research Frameworks Design Research Presentation Sunday , 1 Jan
-                2023 Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 How collaboration
-                makes us better designers Our top 10 Javascript frameworks to
-                use Podcast: Creating a better CX Community Collaboration can
-                make our teams stronger, and our individual designs better.
-                JavaScript frameworks make development easy with extensive
-                features and functionalities. Starting a community doesn’t need
-                to be complicated, but how do you get started? Design Research
-                Presentation Software Development Tools SaaS Podcasts Customer
-                Success Presentation Previous 1 2 3 ... 8 9 10 Next ll blog
-                posts Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 Sunday , 1 Jan
-                2023 Bill Walsh leadership lessons PM mental models What is
-                Wireframing? Like to know the secrets of transforming a 2-14
-                team into a 3x Super Bowl winning Dynasty? Mental models are
-                simple expressions of complex processes or relationships.
-                Introduction to Wireframing and its Principles. Learn from the
-                best in the industry. Leadership Management Presentation Product
-                Research Frameworks Design Research Presentation Sunday , 1 Jan
-                2023 Sunday , 1 Jan 2023 Sunday , 1 Jan 2023 How collaboration
-                makes us better designers Our top 10 Javascript frameworks to
-                use Podcast: Creating a better CX Community Collaboration can
-                make our teams stronger, and our individual designs better.
-                JavaScript frameworks make development easy with extensive
-                features and functionalities. Starting a community doesn’t need
-                to be complicated, but how do you get started? Design Research
-                Presentation Software Development Tools SaaS Podcasts Customer
-                Success Presentation Previous 1 2 3 ... 8 9 10 Next.
-              </p>
+              <p className="text-slate-300">{blog?.body}</p>
             </>
           )}
           <p className="text-secondary text-center text-[2rem] mt-3 mb-10">

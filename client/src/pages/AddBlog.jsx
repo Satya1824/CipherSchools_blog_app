@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layout/Layout";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { bouncy } from "ldrs";
 
 const AddBlog = () => {
   const [category, setCategory] = useState("");
@@ -13,6 +15,8 @@ const AddBlog = () => {
   const [error3, setError3] = useState(false);
   const [error4, setError4] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const resetForm = () => {
     setCategory("");
@@ -59,6 +63,7 @@ const AddBlog = () => {
           progress: undefined,
           theme: "dark",
         });
+        navigate(`/blog/${res.data._id}`);
       } else {
         toast.error(res.data.message, {
           position: "top-right",
@@ -87,6 +92,10 @@ const AddBlog = () => {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    bouncy.register();
+  }, []);
 
   return (
     <Layout title={"Add Blog"}>
@@ -177,12 +186,22 @@ const AddBlog = () => {
             }}
           />
         </div>
-        <button
-          className="text-primmary md:text-secondary bg-secondary md:bg-transparent border md:hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold w-full sm:w-auto"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+
+        {loading ? (
+          <button
+            className="text-primmary md:text-secondary bg-secondary md:bg-transparent border  px-3 py-1 rounded-sm transition font-semibold w-full sm:w-[100px]"
+            disabled
+          >
+            <l-bouncy size="20" speed="1.75" color="white"></l-bouncy>
+          </button>
+        ) : (
+          <button
+            className="text-primmary md:text-secondary bg-secondary md:bg-transparent border md:hover:bg-secondary hover:text-primary px-3 py-1 rounded-sm transition font-semibold w-full sm:w-auto"
+            onClick={handleSubmit}
+          >
+            Publish
+          </button>
+        )}
       </div>
     </Layout>
   );

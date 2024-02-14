@@ -103,7 +103,6 @@ const UpdateBlog = () => {
       });
 
       if (res.data.success) {
-        getSingleBlog(id);
         toast.success(res.data.message, {
           position: "top-right",
           autoClose: 5000,
@@ -114,6 +113,7 @@ const UpdateBlog = () => {
           progress: undefined,
           theme: "dark",
         });
+        navigate(`/blog/${id}`);
       } else {
         toast.error(res.data.message, {
           position: "top-right",
@@ -214,9 +214,15 @@ const UpdateBlog = () => {
                 id="category"
                 name="category"
                 placeholder="Category of the blog"
-                className="px-3 py-2 w-full border rounded-md bg-transparent focus:outline-none text-secondary"
+                className="px-3 py-2 w-full rounded-md bg-transparent focus:outline-none text-secondary"
+                style={{
+                  border: error1 ? "1px solid red" : "1px solid #dadada",
+                }}
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setError1(false);
+                }}
               />
             </div>
             <div className="mb-5">
@@ -231,9 +237,15 @@ const UpdateBlog = () => {
                 id="title"
                 name="title"
                 placeholder="Title of the blog"
-                className="px-3 py-2 w-full border rounded-md bg-transparent focus:outline-none text-secondary"
+                className="px-3 py-2 w-full rounded-md bg-transparent focus:outline-none text-secondary"
+                style={{
+                  border: error2 ? "1px solid red" : "1px solid #dadada",
+                }}
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                  setError2(false);
+                }}
               />
             </div>
             <div className="mb-5">
@@ -249,9 +261,15 @@ const UpdateBlog = () => {
                 id="body"
                 name="body"
                 placeholder="Body of the blog..."
-                className="px-3 py-2 w-full border rounded-md bg-transparent focus:outline-none text-secondary"
+                className="px-3 py-2 w-full rounded-md bg-transparent focus:outline-none text-secondary"
+                style={{
+                  border: error3 ? "1px solid red" : "1px solid #dadada",
+                }}
                 value={body}
-                onChange={(e) => setBody(e.target.value)}
+                onChange={(e) => {
+                  setBody(e.target.value);
+                  setError3(false);
+                }}
               />
             </div>
             <div className="mb-10">
@@ -266,9 +284,15 @@ const UpdateBlog = () => {
                 id="image"
                 name="image"
                 placeholder="URL of the image"
-                className="px-3 py-2 w-full border rounded-md bg-transparent focus:outline-none text-secondary"
+                className="px-3 py-2 w-full rounded-md bg-transparent focus:outline-none text-secondary"
+                style={{
+                  border: error4 ? "1px solid red" : "1px solid #dadada",
+                }}
                 value={image}
-                onChange={(e) => setImage(e.target.value)}
+                onChange={(e) => {
+                  setImage(e.target.value);
+                  setError4(false);
+                }}
               />
             </div>
             <div className="flex flex-col sm:flex-row gap-5">

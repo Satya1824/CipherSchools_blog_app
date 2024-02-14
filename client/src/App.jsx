@@ -8,23 +8,29 @@ import AddBlog from "./pages/AddBlog";
 import Blogs from "./pages/Blogs";
 import { useAuth } from "./context/auth";
 import UpdateBlog from "./pages/UpdateBlog";
+import { useSearch } from "./context/search";
+import Search from "./pages/Search";
 
 function App() {
   const [auth, setAuth] = useAuth();
+  const [search, setSearch] = useSearch();
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blog/:id" element={<SingleBlog />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/addBlog" element={auth?.user ? <AddBlog /> : <Auth />} />
-        <Route
-          path="/updateBlog/:id"
-          element={auth?.user ? <UpdateBlog /> : <Auth />}
-        />
-        <Route path="*" element={<PageNotFound />} />
+        {search ? (
+          <Route path="*" element={<Search />} />
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog/:id" element={<SingleBlog />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/addBlog" element={<AddBlog />} />
+            <Route path="/updateBlog/:id" element={<UpdateBlog />} />
+            <Route path="*" element={<PageNotFound />} />
+          </>
+        )}
       </Routes>
     </BrowserRouter>
   );
