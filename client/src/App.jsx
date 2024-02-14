@@ -10,6 +10,7 @@ import { useAuth } from "./context/auth";
 import UpdateBlog from "./pages/UpdateBlog";
 import { useSearch } from "./context/search";
 import Search from "./pages/Search";
+import Protected from "./components/auth/Protected";
 
 function App() {
   const [auth, setAuth] = useAuth();
@@ -26,8 +27,14 @@ function App() {
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:id" element={<SingleBlog />} />
             <Route path="/profile/:id" element={<Profile />} />
-            <Route path="/addBlog" element={<AddBlog />} />
-            <Route path="/updateBlog/:id" element={<UpdateBlog />} />
+            <Route
+              path="/addBlog"
+              element={<Protected Component={AddBlog} />}
+            />
+            <Route
+              path="/updateBlog/:id"
+              element={<Protected Component={UpdateBlog} />}
+            />
             <Route path="*" element={<PageNotFound />} />
           </>
         )}
